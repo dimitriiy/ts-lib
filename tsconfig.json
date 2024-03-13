@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "jsx": "react",
+    "module": "esnext",
+    "stripInternal": true,
+    "declaration": true,
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "experimentalDecorators": true,
+    "strictNullChecks": true,
+    "baseUrl": "./src",
+    "outDir": "./build",
+    "paths": {
+      "^components": ["src/components"],
+      "^contexts": ["src/contexts"],
+      "^hooks": ["src/hooks"],
+      "^types": ["src/types"],
+      "^theme": ["src/theme"],
+      "^utils": ["src/utils"]
+    },
+    "plugins": [{ "transform": "typescript-transform-paths", "useRootDirs": true, "afterDeclarations": true }]
+  },
+
+  "exclude": ["build"]
+}

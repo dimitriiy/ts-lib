@@ -1,0 +1,69 @@
+---
+include:
+  - project: py-libs/infra/gitlab-ci
+    file: TBD/.gitlab-ci-linting-limited.yml
+    ref: salt-migration
+
+stages:
+  - prepare
+  - tests
+
+.node-image: &node-image
+  image: docker-registry.x5.ru/node:20
+
+.cache-template: &cache-template
+  key:
+    files:
+      - yarn.lock
+  paths:
+    - node_modules
+  policy: pull-push
+
+.branchs: &branches
+  - merge_requests
+  - master
+  - develop
+  - test
+  - stage
+
+install dependencies:
+  stage: prepare
+  <<: *node-image
+  script:
+    - yarn install
+  cache:
+    <<: *cache-template
+    policy: pull-push
+  only:
+    refs: *branches
+
+
+run linter:
+  stage: tests
+  <<: *node-image
+  script:
+    - yarn eslint
+  cache:
+    <<: *cache-template
+    policy: pull
+  only:
+    refs: *branches
+
+unit-test:
+  <<: *node-image
+  stage: tests
+  script:
+    - yarn run test:ci
+  coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
+  cache:
+    <<: *cache-template
+    policy: pull
+  only:
+    refs: *branches
+  artifacts:
+    paths:
+      - coverage/
+    when: always
+    reports:
+      junit:
+        - junit.xml
